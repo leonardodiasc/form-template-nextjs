@@ -1,6 +1,7 @@
 import { ChakraProvider } from "@chakra-ui/react";
 import { extendTheme } from "@chakra-ui/react";
 import EvaluationForm from "@/components/FormComponent";
+import SecondEvaluationForm from "@/components/SecondFormComponent";
 
 
 export default function Home() {
@@ -19,11 +20,37 @@ export default function Home() {
         'II - Gestão de Pessoas': ['1. Planeja, organiza e coordena o trabalho pedagógico e administrativo da unidade de ensino, garantindo a participação de todos os segmentos da comunidade escolar.',
         ]
       };
+      const factorsData = {
+        factor1: [
+          {
+            name: 'SubFactor1',
+            criteria: [
+              { name: 'Criteria1', mark: 10 },
+              { name: 'Criteria2', mark: 8 },
+              // Add more criteria as needed
+            ]
+          },
+          // Add more sub-factors for factor1 as needed
+        ],
+        factor2: [
+          {
+            name: 'SubFactor2',
+            criteria: [
+              { name: 'Criteria3', mark: 5 },
+              { name: 'Criteria4', mark: 7 },
+              // Add more criteria as needed
+            ]
+          },
+          // Add more sub-factors for factor2 as needed
+        ],
+        // Add more factors as needed
+      };
+      
     
 
     return (
       <ChakraProvider>
-        <EvaluationForm factors={factors} yesValue={0.4} />
+        <SecondEvaluationForm factors={factorsData} />
       </ChakraProvider>
     )
   }
