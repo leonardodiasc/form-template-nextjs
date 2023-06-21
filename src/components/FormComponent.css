@@ -1,0 +1,28 @@
+.form-component {
+    max-width: 90%;
+    margin: 0 auto;
+    padding: 2rem;
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+    color: #000000;
+}
+
+.evaluation-table {
+    margin-bottom: 1rem;
+    width: 100%;
+    border-collapse: collapse;
+    color: #000000;
+}
+
+.evaluation-table th, .evaluation-table td {
+    border: 1px solid #000000;
+    padding: 8px;
+    text-align: left;
+}
+
+.total-grade {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #000000;
+}
