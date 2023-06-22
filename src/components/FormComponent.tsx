@@ -7,6 +7,8 @@ import './FormComponent.css';
 interface EvaluationFormProps {
   factors: { [key: string]: string[] };
   yesValue: number;
+  inPartValue?: number;
+  formType: number;
 }
 
 interface RadioInputProps {
@@ -15,6 +17,14 @@ interface RadioInputProps {
   value: number;
   selectedValue: number;
   onChange: (val: number) => void;
+}
+const renderWithLineBreaks = (text: string) => {
+  return text.split('<br>').map((line, index, arr) => (
+    <React.Fragment key={index}>
+      {line}
+      {index !== arr.length - 1 && <br />}
+    </React.Fragment>
+  ));
 }
 
 const RadioInput: React.FC<RadioInputProps> = ({ name, label, value, selectedValue, onChange }) => {
@@ -31,7 +41,8 @@ const RadioInput: React.FC<RadioInputProps> = ({ name, label, value, selectedVal
   );
 };
 
-const EvaluationForm: React.FC<EvaluationFormProps> = ({ factors, yesValue }) => {
+const EvaluationForm: React.FC<EvaluationFormProps> = ({ factors, yesValue, inPartValue, formType }) => {
+  const partValue = inPartValue || 0;
   const [values, setValues] = useState<{ [key: string]: number }>({});
 
   const handleInputChange = (name: string, value: number) => {
@@ -50,7 +61,8 @@ const EvaluationForm: React.FC<EvaluationFormProps> = ({ factors, yesValue }) =>
 
     return { factorValues, totalMaxGrade, totalGrade };
   }, [factors, yesValue, values]);
-
+  const yesLabel = `Sim (${yesValue})`;
+  const partLabel = `Em parte (${partValue})`;
   return (
     <div className="form-component">
       <Table className="evaluation-table">
@@ -63,30 +75,32 @@ const EvaluationForm: React.FC<EvaluationFormProps> = ({ factors, yesValue }) =>
         </thead>
         <tbody>
           {Object.keys(factors).map(factor => (
+            
             <React.Fragment key={factor}>
               {factors[factor].map((subFactor, i) => (
                 <tr key={subFactor}>
                   {i === 0 && <td rowSpan={factors[factor].length}>{factor}</td>}
-                  <td>{subFactor}</td>
+                  <td>{renderWithLineBreaks(subFactor)}</td>
                   <td>
                     <Form>
                       <RadioInput
                         name={subFactor}
-                        label="Sim"
+                        label={yesLabel}
                         value={yesValue}
                         selectedValue={values[subFactor] || 0}
                         onChange={val => handleInputChange(subFactor, val)}
                       />
-                      <RadioInput
+                      {formType === 1 && (<RadioInput
                         name={subFactor}
-                        label="Em parte"
-                        value={yesValue / 2}
+                        label={partLabel}
+                        value={partValue}
                         selectedValue={values[subFactor] || 0}
                         onChange={val => handleInputChange(subFactor, val)}
-                      />
+                      />)}
+    
                       <RadioInput
                         name={subFactor}
-                        label="Não"
+                        label="Não (0.0)"
                         value={0}
                         selectedValue={values[subFactor] || 0}
                         onChange={val => handleInputChange(subFactor, val)}

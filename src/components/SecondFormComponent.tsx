@@ -16,58 +16,64 @@ interface SubFactor {
 
 interface EvaluationFormProps {
   factors: { [key: string]: SubFactor[] };
+  totalScores: number[];
 }
 
-interface SelectInputProps {
+const CheckboxInput: React.FC<{
   name: string;
   options: Criteria[];
-  selectedValue: string;
-  onChange: (val: string) => void;
-}
-
-const SelectInput: React.FC<SelectInputProps> = ({ name, options, selectedValue, onChange }) => {
+  selectedValues: string[];
+  onChange: (name: string, value: string, checked: boolean) => void;
+}> = ({ name, options, selectedValues, onChange }) => {
   return (
-    <Form.Control as="select" value={selectedValue} onChange={(e) => onChange(e.target.value)} className='select-criteria'>
-      <option value="" disabled selected>Escolha...</option>
-      {options.map((option, index) => (
-        <option key={index} value={option.name}>
-          {option.name} ({option.mark})
-        </option>
+    <>
+      {options.map((option: Criteria, index: number) => (
+        <Form.Check 
+          key={index}
+          type="checkbox"
+          id={`${name}-${index}`}
+          label={`${option.name} (${option.mark})`}
+          checked={selectedValues.includes(option.name)}
+          onChange={(e) => onChange(name, option.name, e.target.checked)}
+        />
       ))}
-      <option value="none">Nenhuma das opções</option> 
-    </Form.Control>
+    </>
   );
 };
-const SecondEvaluationForm: React.FC<EvaluationFormProps> = ({ factors }) => {
-  const [values, setValues] = useState<{ [key: string]: string }>({});
-  
-  const handleInputChange = (name: string, value: string) => {
-    setValues(prevValues => ({ ...prevValues, [name]: value }));
+
+const SecondEvaluationForm: React.FC<EvaluationFormProps> = ({ factors, totalScores }) => {
+  const [values, setValues] = useState<{ [key: string]: string[] }>({});
+
+  const handleInputChange = (name: string, value: string, checked: boolean) => {
+    setValues(prevValues => {
+      const prevSelectedValues = prevValues[name] || [];
+      if (checked) {
+        return { ...prevValues, [name]: [...prevSelectedValues, value] };
+      } else {
+        return { ...prevValues, [name]: prevSelectedValues.filter(val => val !== value) };
+      }
+    });
   };
 
   const { factorValues, totalMaxGrade, totalGrade } = useMemo(() => {
-    const factorValues = Object.keys(factors).map((factor) => {
-      const maxScore = Math.max(...factors[factor].map(subFactor => Math.max(...subFactor.criteria.map(criterion => criterion.mark))));
+    const factorValues = Object.keys(factors).map((factor, index) => {
+      const maxScore = totalScores[index];
       let totalScore = factors[factor].reduce((acc, subFactor) => {
-        let selectedCriteriaMark = 0;
-        if (values[subFactor.name] !== 'none') {
-          const selectedCriteria = subFactor.criteria.find(criterion => criterion.name === values[subFactor.name]);
-          selectedCriteriaMark = selectedCriteria ? selectedCriteria.mark : 0;
-        }
-        return acc + selectedCriteriaMark;
+        const selectedCriteriaMarks = values[subFactor.name]?.map(
+          selectedValue => subFactor.criteria.find(criterion => criterion.name === selectedValue)?.mark ?? 0
+        ) ?? [];
+        return acc + selectedCriteriaMarks.reduce((acc, mark) => acc + mark, 0);
       }, 0);
-  
-      // Cap the total score to the maximum score
+
       totalScore = Math.min(totalScore, maxScore);
       return { factor, maxScore, totalScore };
     });
-  
+
     const totalMaxGrade = factorValues.reduce((acc, fValue) => acc + fValue.maxScore, 0);
     const totalGrade = factorValues.reduce((acc, fValue) => acc + fValue.totalScore, 0);
-  
+
     return { factorValues, totalMaxGrade, totalGrade };
-  }, [factors, values]);
-  
+  }, [factors, values, totalScores]);
 
   return (
     <div className="form-component">
@@ -82,32 +88,26 @@ const SecondEvaluationForm: React.FC<EvaluationFormProps> = ({ factors }) => {
           </tr>
         </thead>
         <tbody>
-        {Object.keys(factors).map(factor => {
-            const maxScore = Math.max(...factors[factor].map(subFactor => Math.max(...subFactor.criteria.map(criterion => criterion.mark))));
-            const totalScore = factorValues.find(fv => fv.factor === factor)?.totalScore ?? 0;
-            return (
-              <React.Fragment key={factor}>
-                {factors[factor].map((subFactor, i) => {
-                  return (
-                    <tr key={subFactor.name}>
-                      {i === 0 && <td rowSpan={factors[factor].length}>{factor}</td>}
-                      <td>{subFactor.name}</td>
-                      <td>
-                        <SelectInput
-                          name={subFactor.name}
-                          options={subFactor.criteria}
-                          selectedValue={values[subFactor.name] ?? ''}
-                          onChange={val => handleInputChange(subFactor.name, val)}
-                        />
-                      </td>
-                      {i === 0 && <td rowSpan={factors[factor].length}>{maxScore}</td> }
-                      {i === 0 && <td rowSpan={factors[factor].length}>{totalScore.toFixed(2)}</td> }
-                    </tr>
-                  );
-                })}
-              </React.Fragment>
-            );
-          })}
+          {factorValues.map(({ factor, maxScore, totalScore }, index) => (
+            <React.Fragment key={factor}>
+              {factors[factor].map((subFactor, i) => (
+                <tr key={subFactor.name}>
+                  {i === 0 && <td rowSpan={factors[factor].length}>{factor}</td>}
+                  <td>{subFactor.name}</td>
+                  <td>
+                    <CheckboxInput
+                      name={subFactor.name}
+                      options={subFactor.criteria}
+                      selectedValues={values[subFactor.name] ?? []}
+                      onChange={handleInputChange}
+                    />
+                  </td>
+                  {i === 0 && <td rowSpan={factors[factor].length}>{maxScore}</td>}
+                  {i === 0 && <td rowSpan={factors[factor].length}>{totalScore.toFixed(2)}</td>}
+                </tr>
+              ))}
+            </React.Fragment>
+          ))}
           {factorValues.map(({ factor, maxScore, totalScore }) => (
             <tr key={factor}>
               <td colSpan={3}><strong>Total do {factor}</strong></td>

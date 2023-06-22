@@ -20,6 +20,13 @@ export default function Home() {
         'II - Gestão de Pessoas': ['1. Planeja, organiza e coordena o trabalho pedagógico e administrativo da unidade de ensino, garantindo a participação de todos os segmentos da comunidade escolar.',
         ]
       };
+      const factorsCophep = {
+        'III - Registros Funcionais': ['DRH Referencial: Ficha Funcional 1. Permanece no exercício de suas funções sem registro de devoluções.',
+        '2. Permanece no exercício de suas funções sem registro de penalidades',
+        'DEF/DEI Referencial: Registros do DEF e DEI. <br>1. Participa dos Encontros de Formação promovidos pela SME.',
+        '2. Mantém registros pedagógicos atualizados do CMEI contribuindo para o trabalho de assessoramento do DEI.',
+        ],
+      };
       const factorsData = {
         'IV Exercício da Docência': [
           {
@@ -93,7 +100,8 @@ export default function Home() {
 
     return (
       <ChakraProvider>
-        <SecondEvaluationForm factors={factorsData} />
+        <SecondEvaluationForm factors={factorsData} totalScores={[1,1,2,1]} />
+        <EvaluationForm factors={factorsCophep} yesValue={0.25} formType={2}/>
       </ChakraProvider>
     )
   }
