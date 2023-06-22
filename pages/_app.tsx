@@ -21,27 +21,70 @@ export default function Home() {
         ]
       };
       const factorsData = {
-        factor1: [
+        'IV Exercício da Docência': [
           {
-            name: 'SubFactor1',
+            name: 'Permanece na docência durante o período avaliado.',
             criteria: [
-              { name: 'Criteria1', mark: 10 },
-              { name: 'Criteria2', mark: 8 },
+              { name: 'Durante dois anos letivos.', mark: 1 },
+              { name: 'Durante um ano letivo.', mark: 0.5 },
               // Add more criteria as needed
             ]
           },
           // Add more sub-factors for factor1 as needed
         ],
-        factor2: [
+        'V Contribuição no Campo da Educação': [
           {
-            name: 'SubFactor2',
+            name: '1. Publica trabalhos no campo da educação',
             criteria: [
-              { name: 'Criteria3', mark: 5 },
-              { name: 'Criteria4', mark: 7 },
+              { name: 'Livro e artigo', mark: 1 },
+              { name: 'Cartilha', mark: 0.5 },
               // Add more criteria as needed
             ]
           },
+          {
+            name: '2. Ministra cursos e oficinas em eventos promovidos pela SME.',
+            criteria:[
+              {name: 'Cursos a cada 20 horas', mark: 1},
+              {name: 'Oficinas', mark: 0.5},
+            ]
+
+          },
+          {
+            name: '3. Apresenta trabalhos em congressos, colóquios, seminários ou similares.',
+            criteria:[
+              {name: 'Curso, Palestra, Mesa Redonda, Oficina', mark: 1},
+              {name: 'Comunicação oral, Pôster', mark: 0.5},
+            ]
+
+          },
           // Add more sub-factors for factor2 as needed
+        ],
+        'VI Participação em Colegiados': [
+          {
+            name: 'Participa como membro efetivo de Colegiados.',
+            criteria: [
+              { name: 'Conselhos e Comissões Permanentes.', mark: 1 },
+              { name: 'Unidade Executora', mark: 1 },
+              { name: 'Outras Comissões e Grupos de Trabalho', mark: 0.5 },
+            ]
+          },
+        ],
+        'VII Qualificação no Campo da Educação': [
+          {
+            name: '1. Comprova com certidão participação nos encontros de Formação oferecidos pela SME.',
+            criteria: [
+              { name: 'Carga mínima de 20 horas.', mark: 0.5 },
+            ]
+          },
+          {
+            name: '2. Comprova, com certidão, a conclusão de cursos de atualização, seminários, congressos, simpósios, jornadas',
+            criteria: [
+              { name: 'Carga horária a partir de 180 horas.', mark: 1 },
+              { name: 'A cada 40h de curso com carga horária mínima de 20h.', mark: 0.5 },
+              // Add more criteria as needed
+            ]
+          },
+          // Add more sub-factors for factor1 as needed
         ],
         // Add more factors as needed
       };
