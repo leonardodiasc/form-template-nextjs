@@ -98,7 +98,7 @@ const EvaluationForm: React.FC<EvaluationFormProps> = ({ factors, yesValue }) =>
             </React.Fragment>
           ))}
           {factorValues.map(({ factor, maxScore, totalScore }) => (
-            <tr key={factor}>
+            <tr key={factor} className="borda-fator" >
               <td>Total do {factor}</td>
               <td>Valor máximo: {maxScore}</td>
               <td>Valor obtido: {totalScore.toFixed(2)}</td>

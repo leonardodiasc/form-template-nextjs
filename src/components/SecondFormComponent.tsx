@@ -27,7 +27,7 @@ interface SelectInputProps {
 
 const SelectInput: React.FC<SelectInputProps> = ({ name, options, selectedValue, onChange }) => {
   return (
-    <Form.Control as="select" value={selectedValue} onChange={(e) => onChange(e.target.value)}>
+    <Form.Control as="select" value={selectedValue} onChange={(e) => onChange(e.target.value)} className='select-criteria'>
       <option value="" disabled selected>Escolha...</option>
       {options.map((option, index) => (
         <option key={index} value={option.name}>
@@ -82,29 +82,32 @@ const SecondEvaluationForm: React.FC<EvaluationFormProps> = ({ factors }) => {
           </tr>
         </thead>
         <tbody>
-          {Object.keys(factors).map(factor => (
-            <React.Fragment key={factor}>
-            {factors[factor].map((subFactor, i) => {
-              const selectedCriteria = subFactor.criteria.find(criterion => criterion.name === values[subFactor.name]);
-              return (
-                <tr key={subFactor.name}>
-                  {i === 0 && <td rowSpan={factors[factor].length}>{factor}</td>}
-                  <td>{subFactor.name}</td>
-                  <td>
-                    <SelectInput
-                      name={subFactor.name}
-                      options={subFactor.criteria}
-                      selectedValue={values[subFactor.name]}
-                      onChange={val => handleInputChange(subFactor.name, val)}
-                    />
-                  </td>
-                  <td>{Math.max(...subFactor.criteria.map(criterion => criterion.mark))}</td>
-                  <td>{selectedCriteria ? selectedCriteria.mark : '-'}</td>
-                </tr>
-              );
-            })}
-            </React.Fragment>
-          ))}
+        {Object.keys(factors).map(factor => {
+            const maxScore = Math.max(...factors[factor].map(subFactor => Math.max(...subFactor.criteria.map(criterion => criterion.mark))));
+            const totalScore = factorValues.find(fv => fv.factor === factor)?.totalScore ?? 0;
+            return (
+              <React.Fragment key={factor}>
+                {factors[factor].map((subFactor, i) => {
+                  return (
+                    <tr key={subFactor.name}>
+                      {i === 0 && <td rowSpan={factors[factor].length}>{factor}</td>}
+                      <td>{subFactor.name}</td>
+                      <td>
+                        <SelectInput
+                          name={subFactor.name}
+                          options={subFactor.criteria}
+                          selectedValue={values[subFactor.name] ?? ''}
+                          onChange={val => handleInputChange(subFactor.name, val)}
+                        />
+                      </td>
+                      {i === 0 && <td rowSpan={factors[factor].length}>{maxScore}</td> }
+                      {i === 0 && <td rowSpan={factors[factor].length}>{totalScore.toFixed(2)}</td> }
+                    </tr>
+                  );
+                })}
+              </React.Fragment>
+            );
+          })}
           {factorValues.map(({ factor, maxScore, totalScore }) => (
             <tr key={factor}>
               <td colSpan={3}><strong>Total do {factor}</strong></td>

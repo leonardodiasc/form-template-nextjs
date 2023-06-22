@@ -26,3 +26,20 @@
     font-weight: bold;
     color: #000000;
 }
+
+.select-criteria{
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #000000;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+    color: #000000;
+}
+
+.borda-fator{
+    border: 4px solid #000000;
+    border-radius: 4px;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    color: #000000;
+}
