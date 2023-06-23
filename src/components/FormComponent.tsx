@@ -30,6 +30,7 @@ const renderWithLineBreaks = (text: string) => {
 const RadioInput: React.FC<RadioInputProps> = ({ name, label, value, selectedValue, onChange }) => {
   return (
     <Form.Check
+      className = "btn-default"
       inline
       type="radio"
       label={label}
@@ -81,7 +82,7 @@ const EvaluationForm: React.FC<EvaluationFormProps> = ({ factors, yesValue, inPa
                 <tr key={subFactor}>
                   {i === 0 && <td rowSpan={factors[factor].length}>{factor}</td>}
                   <td>{renderWithLineBreaks(subFactor)}</td>
-                  <td>
+                  <td className="">
                     <Form>
                       <RadioInput
                         name={subFactor}
@@ -112,7 +113,7 @@ const EvaluationForm: React.FC<EvaluationFormProps> = ({ factors, yesValue, inPa
             </React.Fragment>
           ))}
           {factorValues.map(({ factor, maxScore, totalScore }) => (
-            <tr key={factor} className="borda-fator" >
+            <tr key={factor} >
               <td>Total do {factor}</td>
               <td>Valor máximo: {maxScore}</td>
               <td>Valor obtido: {totalScore.toFixed(2)}</td>

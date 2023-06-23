@@ -1,5 +1,4 @@
-import { ChakraProvider } from "@chakra-ui/react";
-import { extendTheme } from "@chakra-ui/react";
+import 'bootstrap/dist/css/bootstrap.min.css';
 import EvaluationForm from "@/components/FormComponent";
 import SecondEvaluationForm from "@/components/SecondFormComponent";
 
@@ -99,9 +98,9 @@ export default function Home() {
     
 
     return (
-      <ChakraProvider>
-        <SecondEvaluationForm factors={factorsData} totalScores={[1,1,2,1]} />
-        <EvaluationForm factors={factorsCophep} yesValue={0.25} formType={2}/>
-      </ChakraProvider>
+      <div className="container">
+          <SecondEvaluationForm factors={factorsData} totalScores={[1, 1, 2, 1]} />
+          <EvaluationForm factors={factorsCophep} yesValue={0.25} formType={2} />
+      </div>
     )
   }

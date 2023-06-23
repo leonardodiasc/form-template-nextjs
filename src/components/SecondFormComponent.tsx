@@ -102,8 +102,8 @@ const SecondEvaluationForm: React.FC<EvaluationFormProps> = ({ factors, totalSco
                       onChange={handleInputChange}
                     />
                   </td>
-                  {i === 0 && <td rowSpan={factors[factor].length}>{maxScore}</td>}
-                  {i === 0 && <td rowSpan={factors[factor].length}>{totalScore.toFixed(2)}</td>}
+                  {i === 0 && <td rowSpan={factors[factor].length} className='text-center'>{maxScore}</td>}
+                  {i === 0 && <td rowSpan={factors[factor].length}  className='text-center '>{totalScore.toFixed(2)}</td>}
                 </tr>
               ))}
             </React.Fragment>
@@ -111,8 +111,8 @@ const SecondEvaluationForm: React.FC<EvaluationFormProps> = ({ factors, totalSco
           {factorValues.map(({ factor, maxScore, totalScore }) => (
             <tr key={factor}>
               <td colSpan={3}><strong>Total do {factor}</strong></td>
-              <td><strong>Valor máximo:</strong> {maxScore}</td>
-              <td><strong>Valor obtido:</strong> {totalScore.toFixed(2)}</td>
+              <td className='text-center'><strong>Valor máximo:</strong> {maxScore}</td>
+              <td className='text-center'><strong>Valor obtido:</strong> {totalScore.toFixed(2)}</td>
             </tr>
           ))}
           <tr>
